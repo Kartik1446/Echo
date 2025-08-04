@@ -5,6 +5,7 @@ from speech_utils import audio_to_text  # type: ignore
 from fastapi.middleware.cors import CORSMiddleware
 from logger_utils import log_emotion  # type: ignore
 from logger_utils import get_emotion_summary  # type: ignore
+from fastapi import data
 
 app = FastAPI()
 
