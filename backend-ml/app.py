@@ -1,14 +1,20 @@
 from fastapi import FastAPI, UploadFile, File
 from pydantic import BaseModel
-from model_utils import detect_emotion  # type: ignore
-from speech_utils import audio_to_text  # type: ignore
 from fastapi.middleware.cors import CORSMiddleware
-from logger_utils import log_emotion  # type: ignore
-from logger_utils import get_emotion_summary  # type: ignore
-from fastapi import data
+import shutil
+import os
+
+from model_utils import (
+    detect_emotion,
+    save_labelled_face,
+    recognize_face
+)
+from speech_utils import audio_to_text, speak
+from logger_utils import log_emotion, get_emotion_summary
 
 app = FastAPI()
 
+# Allow all origins (CORS)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -16,14 +22,18 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# -------------------- MODELS -------------------- #
 class EmotionRequest(BaseModel):
     text: str
 
-# Endpoint: Text input
+class FaceLabelRequest(BaseModel):
+    label: str
+
+# -------------------- EMOTION ROUTES -------------------- #
+
 @app.post("/detect-emotion")
 async def detect_emotion_api(req: EmotionRequest):
     emotion, confidence = detect_emotion(req.text)
-
     log_emotion(req.text, emotion, confidence)
 
     response_map = {
@@ -41,21 +51,15 @@ async def detect_emotion_api(req: EmotionRequest):
         "response": response_map.get(emotion, "I'm here with you.")
     }
 
-# Endpoint: Audio file input
 @app.post("/detect-emotion-from-audio")
 async def detect_emotion_from_audio(file: UploadFile = File(...)):
     file_path = "temp_audio.wav"
 
-    # Save uploaded file
     with open(file_path, "wb") as buffer:
         buffer.write(await file.read())
 
-    # Convert audio to text
     text = audio_to_text(file_path)
-
-    # Detect emotion
     emotion, confidence = detect_emotion(text)
-
     log_emotion(text, emotion, confidence)
 
     return {
@@ -67,3 +71,41 @@ async def detect_emotion_from_audio(file: UploadFile = File(...)):
 @app.get("/emotion-stats")
 async def emotion_stats():
     return get_emotion_summary()
+
+# -------------------- FACE RECOGNITION ROUTES -------------------- #
+
+@app.post("/upload-face/")
+async def upload_face(label: str, file: UploadFile = File(...)):
+    """Upload a face image with a label (name)"""
+    os.makedirs("faces", exist_ok=True)
+    file_path = f"faces/{file.filename}"
+
+    with open(file_path, "wb") as buffer:
+        shutil.copyfileobj(file.file, buffer)
+
+    try:
+        save_labelled_face(file_path, label)
+        return {"status": "success", "label": label}
+    except ValueError as e:
+        return {"status": "error", "message": str(e)}
+
+@app.post("/recognize-face/")
+async def recognize_face_api(file: UploadFile = File(...), speak_response: bool = True):
+    """Recognize a face from uploaded image"""
+    os.makedirs("temp", exist_ok=True)
+    file_path = f"temp/{file.filename}"
+
+    with open(file_path, "wb") as buffer:
+        shutil.copyfileobj(file.file, buffer)
+
+    label = recognize_face(file_path)
+
+    if label:
+        message = f"According to your label, this is {label}."
+    else:
+        message = "Sorry, I do not recognize this person."
+
+    if speak_response:
+        speak(message)
+
+    return {"recognized": label if label else None, "message": message}
