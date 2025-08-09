@@ -1,20 +1,22 @@
-from fastapi import FastAPI, UploadFile, File
+from fastapi import FastAPI, UploadFile, File, HTTPException
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 import shutil
 import os
+import urllib.request
+import logging
+from typing import Optional
 
-from model_utils import (
-    detect_emotion,
-    save_labelled_face,
-    recognize_face
-)
-from speech_utils import audio_to_text, speak
-from logger_utils import log_emotion, get_emotion_summary
+# project utilities (you already have these modules)
+from model_utils import detect_emotion, save_labelled_face, recognize_face  # type: ignore
+from speech_utils import audio_to_text, speak  # type: ignore
+from logger_utils import log_emotion, get_emotion_summary  # type: ignore
 
-app = FastAPI()
+# configure simple logging
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
-# Allow all origins (CORS)
+app = FastAPI(title="Echo Backend - ML / Face / Speech")
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -22,18 +24,52 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# -------------------- MODELS -------------------- #
+# -------------------- Helper: ensure face-detector models --------------------
+
+CAFFE_FILES = {
+    "deploy.prototxt": "https://raw.githubusercontent.com/opencv/opencv_3rdparty/dnn_samples_face_detector_20170830/deploy.prototxt",
+    "res10_300x300_ssd_iter_140000.caffemodel": "https://raw.githubusercontent.com/opencv/opencv_3rdparty/dnn_samples_face_detector_20170830/res10_300x300_ssd_iter_140000.caffemodel"
+}
+
+def ensure_face_detector_files(dest_dir: str = "."):
+    """
+    Download the lightweight OpenCV face detector (Caffe model + prototxt)
+    if not already present in repo root (or dest_dir).
+    """
+    os.makedirs(dest_dir, exist_ok=True)
+    for fname, url in CAFFE_FILES.items():
+        path = os.path.join(dest_dir, fname)
+        if not os.path.exists(path) or os.path.getsize(path) < 1000:
+            logging.info(f"Downloading {fname} ...")
+            try:
+                urllib.request.urlretrieve(url, path)
+                logging.info(f"Saved {path}")
+            except Exception as e:
+                logging.error(f"Failed to download {fname}: {e}")
+                # don't raise here — face recognition fallback (deepface/opencv alternatives) may exist
+    return
+
+# Ensure model files at startup (non-blocking best effort)
+ensure_face_detector_files()
+
+# -------------------- Pydantic models --------------------
+
 class EmotionRequest(BaseModel):
     text: str
 
 class FaceLabelRequest(BaseModel):
     label: str
 
-# -------------------- EMOTION ROUTES -------------------- #
+# -------------------- Emotion Routes --------------------
 
 @app.post("/detect-emotion")
 async def detect_emotion_api(req: EmotionRequest):
-    emotion, confidence = detect_emotion(req.text)
+    try:
+        emotion, confidence = detect_emotion(req.text)
+    except Exception as e:
+        logging.exception("Emotion detection failed")
+        raise HTTPException(status_code=500, detail=str(e))
+
     log_emotion(req.text, emotion, confidence)
 
     response_map = {
@@ -53,59 +89,129 @@ async def detect_emotion_api(req: EmotionRequest):
 
 @app.post("/detect-emotion-from-audio")
 async def detect_emotion_from_audio(file: UploadFile = File(...)):
-    file_path = "temp_audio.wav"
+    # save uploaded file
+    tmp_dir = "temp_audio"
+    os.makedirs(tmp_dir, exist_ok=True)
+    file_path = os.path.join(tmp_dir, file.filename) # type: ignore
 
-    with open(file_path, "wb") as buffer:
-        buffer.write(await file.read())
+    try:
+        with open(file_path, "wb") as buffer:
+            shutil.copyfileobj(file.file, buffer)
 
-    text = audio_to_text(file_path)
-    emotion, confidence = detect_emotion(text)
-    log_emotion(text, emotion, confidence)
+        text = audio_to_text(file_path)
+        emotion, confidence = detect_emotion(text)
+        log_emotion(text, emotion, confidence)
 
-    return {
-        "original_text": text,
-        "emotion": emotion,
-        "confidence": confidence
-    }
+        return {
+            "original_text": text,
+            "emotion": emotion,
+            "confidence": confidence
+        }
+    except Exception as e:
+        logging.exception("Audio emotion detection failed")
+        raise HTTPException(status_code=500, detail=str(e))
+    finally:
+        try:
+            if os.path.exists(file_path):
+                os.remove(file_path)
+        except Exception:
+            pass
 
 @app.get("/emotion-stats")
 async def emotion_stats():
     return get_emotion_summary()
 
-# -------------------- FACE RECOGNITION ROUTES -------------------- #
+# -------------------- Face Recognition Routes --------------------
 
 @app.post("/upload-face/")
 async def upload_face(label: str, file: UploadFile = File(...)):
-    """Upload a face image with a label (name)"""
+    """
+    Upload a labeled face image. This will save encoding for the label.
+    Example form field name: 'label' (string) and file field.
+    """
     os.makedirs("faces", exist_ok=True)
-    file_path = f"faces/{file.filename}"
-
-    with open(file_path, "wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
+    file_path = os.path.join("faces", file.filename) # type: ignore
 
     try:
+        with open(file_path, "wb") as buffer:
+            shutil.copyfileobj(file.file, buffer)
+
+        # save_labelled_face should raise ValueError if no face was detected
         save_labelled_face(file_path, label)
+        logging.info(f"Saved labeled face: {label} -> {file_path}")
         return {"status": "success", "label": label}
     except ValueError as e:
-        return {"status": "error", "message": str(e)}
+        logging.warning(f"No face detected while uploading {file.filename}: {e}")
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        logging.exception("Failed to save labeled face")
+        raise HTTPException(status_code=500, detail=str(e))
+    finally:
+        # keep original file under faces/ for future inspection (optional)
+        pass
 
 @app.post("/recognize-face/")
-async def recognize_face_api(file: UploadFile = File(...), speak_response: bool = True):
-    """Recognize a face from uploaded image"""
-    os.makedirs("temp", exist_ok=True)
-    file_path = f"temp/{file.filename}"
+async def recognize_face_api(file: UploadFile = File(...), speak_response: Optional[bool] = True):
+    """
+    Recognize a face from uploaded image.
+    If speak_response is true (default) the backend will attempt to speak the message.
+    """
+    tmp_dir = "temp"
+    os.makedirs(tmp_dir, exist_ok=True)
+    file_path = os.path.join(tmp_dir, file.filename) # type: ignore
 
-    with open(file_path, "wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
+    try:
+        with open(file_path, "wb") as buffer:
+            shutil.copyfileobj(file.file, buffer)
 
-    label = recognize_face(file_path)
+        label = recognize_face(file_path)  # returns label or None
 
-    if label:
-        message = f"According to your label, this is {label}."
-    else:
-        message = "Sorry, I do not recognize this person."
+        if label:
+            message = f"According to your label, this is {label}."
+        else:
+            message = "Sorry, I do not recognize this person."
 
-    if speak_response:
-        speak(message)
+        if speak_response:
+            try:
+                speak(message)
+            except Exception as e:
+                logging.warning(f"Speak failed: {e}")
 
-    return {"recognized": label if label else None, "message": message}
+        return {"recognized": label if label else None, "message": message}
+    except Exception as e:
+        logging.exception("Face recognition failed")
+        raise HTTPException(status_code=500, detail=str(e))
+    finally:
+        try:
+            if os.path.exists(file_path):
+                os.remove(file_path)
+        except Exception:
+            pass
+
+# -------------------- Utility Endpoints --------------------
+
+@app.get("/health")
+async def healthcheck():
+    return {"status": "ok"}
+
+@app.get("/list-faces")
+async def list_known_faces():
+    """List saved face labels (if your model_utils stores labels file)."""
+    enc_file = "face_encodings.pkl"
+    if os.path.exists(enc_file):
+        try:
+            import pickle
+            with open(enc_file, "rb") as f:
+                data = pickle.load(f)
+            labels = list(dict.fromkeys(data.get("labels", [])))
+            return {"count": len(labels), "labels": labels}
+        except Exception:
+            logging.exception("Failed to read encodings")
+            raise HTTPException(status_code=500, detail="Failed to read encodings")
+    return {"count": 0, "labels": []}
+
+# -------------------- Run with Uvicorn --------------------
+if __name__ == "__main__":
+    # local dev runner
+    import uvicorn
+    uvicorn.run("app:app", host="0.0.0.0", port=8000, reload=True)
