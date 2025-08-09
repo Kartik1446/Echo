@@ -1,87 +1,96 @@
+import os
+import pickle
 import pandas as pd
 from sklearn.pipeline import make_pipeline
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
-import os
-import pickle
-import cv2
 from deepface import DeepFace
+from numpy import dot
+from numpy.linalg import norm
 
 # ---------------- EMOTION DETECTION ---------------- #
 
-# Load your CSV file with labeled emotion data
-df = pd.read_csv("ml_data.csv")  # Ensure this file exists
+# Load dataset
+ML_DATA_FILE = "ml_data.csv"
+if not os.path.exists(ML_DATA_FILE):
+    raise FileNotFoundError(f"{ML_DATA_FILE} not found. Please provide the emotion dataset.")
 
-# Create a pipeline: vectorizer + classifier
+df = pd.read_csv(ML_DATA_FILE)
+
+# Create and train pipeline
 model = make_pipeline(
     TfidfVectorizer(),
     LogisticRegression()
 )
-
-# Train the model
 model.fit(df["text"], df["emotion"])
 
 def detect_emotion(text: str) -> tuple[str, float]:
+    """Predict emotion from text input."""
     pred = model.predict([text])[0]
-    prob = max(model.predict_proba([text])[0])  # highest probability
-    return pred, round(prob, 2)  # e.g., ('anxious', 0.87)
+    prob = max(model.predict_proba([text])[0])
+    return pred, round(prob, 2)
+
 
 # ---------------- FACE RECOGNITION ---------------- #
 
 ENCODINGS_FILE = "face_encodings.pkl"
 
 def load_encodings():
-    """Load stored face embeddings"""
+    """Load stored face embeddings."""
     if os.path.exists(ENCODINGS_FILE):
         with open(ENCODINGS_FILE, "rb") as f:
             return pickle.load(f)
     return {"embeddings": [], "labels": []}
 
 def save_encodings(data):
-    """Save face embeddings to file"""
+    """Save face embeddings to file."""
     with open(ENCODINGS_FILE, "wb") as f:
         pickle.dump(data, f)
 
 def save_labelled_face(image_path: str, label: str):
     """
-    Detects the face in the image, computes its embedding,
-    and stores it with the provided label.
+    Detect face, extract embedding using DeepFace, and save it with label.
     """
     data = load_encodings()
 
     try:
-        # Get embedding using DeepFace
-        embedding_obj = DeepFace.represent(img_path=image_path, model_name="Facenet", enforce_detection=True)
+        embedding_obj = DeepFace.represent(
+            img_path=image_path,
+            model_name="Facenet",
+            enforce_detection=True
+        )
+
         if not embedding_obj or "embedding" not in embedding_obj[0]:
             raise ValueError("No face detected in the image.")
-        
+
         embedding = embedding_obj[0]["embedding"]
         data["embeddings"].append(embedding)
         data["labels"].append(label)
+
         save_encodings(data)
+
     except Exception as e:
         raise ValueError(f"Error processing image: {e}")
 
 def recognize_face(image_path: str) -> str | None:
     """
-    Recognize a face by comparing embeddings with stored data.
-    Returns the label if matched, otherwise None.
+    Compare a given face with stored embeddings and return matched label.
     """
     data = load_encodings()
     if not data["embeddings"]:
         return None
 
     try:
-        # Compute embedding for the given image
-        embedding_obj = DeepFace.represent(img_path=image_path, model_name="Facenet", enforce_detection=True)
+        embedding_obj = DeepFace.represent(
+            img_path=image_path,
+            model_name="Facenet",
+            enforce_detection=True
+        )
+
         if not embedding_obj or "embedding" not in embedding_obj[0]:
             return None
-        
-        embedding = embedding_obj[0]["embedding"]
 
-        # Compare with stored embeddings using cosine similarity
-        from numpy import dot
-        from numpy.linalg import norm
+        embedding = embedding_obj[0]["embedding"]
 
         def cosine_similarity(a, b):
             return dot(a, b) / (norm(a) * norm(b))
@@ -95,10 +104,7 @@ def recognize_face(image_path: str) -> str | None:
                 best_score = score
                 best_match = label
 
-        # Threshold for match
-        if best_score > 0.75:
-            return best_match
-        else:
-            return None
+        return best_match if best_score > 0.75 else None
+
     except Exception:
         return None
