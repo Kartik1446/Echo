@@ -11,7 +11,7 @@ const Navbar = ({ theme = 'dark', toggleTheme, onGetStartedClick, onTeamClick })
             src="/Echo-logo.png"
             alt="ECHO Logo"
             className="w-12 h-12 mr-3 object-contain rounded-full"
-            onError={(e) => { e.target.onerror = null; e.target.src = "https://placehold.co/48x48/513524/F9E4C8?text=Logo"; }}
+            onError={(e) => { e.target.onerror = null; e.target.src = `${process.env.PUBLIC_URL}/logo192.png`; }}
           />
           <span style={{ color: currentColors.accentGold }} className="text-3xl font-bold">ECHO</span>
         </div>
