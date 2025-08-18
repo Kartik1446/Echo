@@ -79,7 +79,7 @@ const TeamPage = ({ theme = 'dark', onBack }) => {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.5 }}
       className="w-full min-h-screen pt-24 md:pt-32 px-6"
-      style={{ backgroundColor: currentColors.primaryBg }}
+      style={{ backgroundColor: 'transparent' }}
     >
       <div className="max-w-7xl mx-auto">
         <motion.button
