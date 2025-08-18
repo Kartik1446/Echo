@@ -6,7 +6,6 @@ const NavItem = ({ icon, text, open, onClick }) => {
     open: { opacity: 1, x: 0, transition: { duration: 0.3, delay: 0.1 } },
     closed: { opacity: 0, x: -10, transition: { duration: 0.2 } },
   };
-
   return (
     <div
       className={`flex items-center p-3 rounded-lg cursor-pointer transition-all duration-300 hover:bg-white hover:bg-opacity-10 ${!open ? 'justify-center' : ''}`}
@@ -28,3 +27,4 @@ const NavItem = ({ icon, text, open, onClick }) => {
 };
 
 export default NavItem;
+
