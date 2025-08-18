@@ -2,33 +2,37 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Github, Linkedin, ChevronLeft } from 'lucide-react';
 import { themes } from '../styles/tailwindStyles';
+import satyabratImg from './satyabrat.jpeg';
+import kartikImg from './kartik.jpeg';
+import ashutoshImg from './ashutosh.jpeg';
+import archanaImg from './archana.jpeg';
 
 const teamMembers = [
   {
     name: 'Satyabrat Sahu',
-    role: 'Backend',
-    photoUrl: '/satya.jpeg',
+    role: 'ML Engineer',
+    photoUrl: satyabratImg,
     githubUrl: 'https://github.com/Satyabrat2005',
     linkedinUrl: 'https://www.linkedin.com/in/satyabrat-sahu-638726324/',
   },
   {
     name: 'Kartik Bhardwaj',
-    role: 'Backend',
-    photoUrl: '/kartik.jpeg',
+    role: 'ML Engineer',
+    photoUrl: kartikImg,
     githubUrl: 'https://github.com/Kartik1446',
     linkedinUrl: 'https://www.linkedin.com/in/kartik1446',
   },
   {
     name: 'Ashutosh Rath',
-    role: 'IOT',
-    photoUrl: '/ashutosh.jpeg',
+    role: 'IOT Squad',
+    photoUrl: ashutoshImg,
     githubUrl: 'https://github.com/GitGudScrubss',
     linkedinUrl: 'https://www.linkedin.com/in/ashutosh-rath-904687300/',
   },
   {
     name: 'Archana Gupta',
-    role: 'Frontend',
-    photoUrl: '/archana.jpeg',
+    role: 'UI/UX Designer',
+    photoUrl: archanaImg,
     githubUrl: 'https://github.com/Archana15-codes',
     linkedinUrl: 'https://www.linkedin.com/in/archana-gupta2006',
   },
@@ -47,6 +51,7 @@ const TeamMemberCard = ({ theme, member }) => {
           src={member.photoUrl}
           alt={member.name}
           className="w-full h-full object-cover"
+          loading="lazy"
           onError={(e) => { e.target.onerror = null; e.target.src = "https://placehold.co/300x300/2C2623/F9E4C8?text=Photo"; }}
         />
       </div>
