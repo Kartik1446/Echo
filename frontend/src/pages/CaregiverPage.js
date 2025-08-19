@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Wifi, WifiOff, Battery, MapPin, AlertTriangle, Bell, CheckCircle, ChevronLeft } from 'lucide-react';
 import { themes } from '../styles/tailwindStyles';
+import ScrollFloat from '../shared/ScrollFloat';
 
 const PatientStatusSection = ({ theme, user, patientStatus }) => {
   const currentColors = themes[theme];
@@ -10,7 +11,7 @@ const PatientStatusSection = ({ theme, user, patientStatus }) => {
 
   return (
     <div className="p-8 rounded-2xl shadow-lg" style={{ backgroundColor: currentColors.secondaryBg }}>
-      <h2 className="text-2xl font-bold mb-6 border-b pb-4" style={{ color: currentColors.primaryText, borderColor: 'rgba(255,255,255,0.1)' }}>Patient Details</h2>
+      <ScrollFloat as="h2" containerClassName="text-2xl font-bold mb-6 border-b pb-4" style={{ color: currentColors.primaryText, borderColor: 'rgba(255,255,255,0.1)' }}>Patient Details</ScrollFloat>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div className="flex items-center gap-6">
           <img
@@ -20,7 +21,7 @@ const PatientStatusSection = ({ theme, user, patientStatus }) => {
             style={{ borderColor: currentColors.accentGold }}
           />
           <div>
-            <h3 className="text-3xl font-bold">{user?.name || 'Patient Name'}</h3>
+            <ScrollFloat as="h3" containerClassName="text-3xl font-bold">{user?.name || 'Patient Name'}</ScrollFloat>
             <div className="flex items-center gap-2 mt-2">
               <span className={`w-3 h-3 rounded-full ${isOnline ? 'bg-green-500' : 'bg-red-500'}`}></span>
               <span className={`text-sm font-semibold ${isOnline ? 'text-green-400' : 'text-red-400'}`}>{patientStatus.status}</span>
@@ -76,7 +77,7 @@ const AlertsSection = ({ theme, alerts }) => {
 
   return (
     <div className="p-8 rounded-2xl shadow-lg" style={{ backgroundColor: currentColors.secondaryBg }}>
-      <h2 className="text-2xl font-bold mb-6 border-b pb-4" style={{ color: currentColors.primaryText, borderColor: 'rgba(255,255,255,0.1)' }}>Alerts & Notifications</h2>
+      <ScrollFloat as="h2" containerClassName="text-2xl font-bold mb-6 border-b pb-4" style={{ color: currentColors.primaryText, borderColor: 'rgba(255,255,255,0.1)' }}>Alerts & Notifications</ScrollFloat>
       <div className="space-y-4 max-h-96 overflow-y-auto pr-2">
         {alerts.length > 0 ? alerts.map(alert => (
           <div key={alert.id} className="p-4 rounded-lg flex items-start gap-4" style={{ backgroundColor: currentColors.primaryBg }}>
@@ -115,7 +116,7 @@ const CaregiverPage = ({ theme = 'dark', onBack, user, patientStatus, alerts }) 
     >
       <div className={`max-w-7xl mx-auto ${mainContentPadding}`}>
         <div className="flex items-center justify-between mb-10">
-          <h1 className="text-5xl font-bold">Caregiver Dashboard</h1>
+          <ScrollFloat as="h1" containerClassName="text-5xl font-bold">Caregiver Dashboard</ScrollFloat>
           <motion.button
             onClick={onBack}
             className="flex items-center gap-2 text-lg font-semibold transition-colors"

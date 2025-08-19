@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Camera, Smartphone, Battery, ChevronLeft } from 'lucide-react';
 import { themes } from '../styles/tailwindStyles';
+import ScrollFloat from '../shared/ScrollFloat';
 
 const UserInfoSection = ({ theme, user, onUpdateUser }) => {
   const currentColors = themes[theme];
@@ -34,7 +35,7 @@ const UserInfoSection = ({ theme, user, onUpdateUser }) => {
 
   return (
     <div className="p-8 rounded-2xl shadow-lg" style={{ backgroundColor: currentColors.secondaryBg }}>
-      <h2 className="text-2xl font-bold mb-6" style={{ color: currentColors.primaryText }}>User Info</h2>
+      <ScrollFloat as="h2" containerClassName="text-2xl font-bold mb-6" style={{ color: currentColors.primaryText }}>User Info</ScrollFloat>
       <div className="flex flex-col items-center gap-6 md:flex-row md:items-start">
         <div className="relative flex-shrink-0">
           <img
@@ -84,7 +85,7 @@ const DeviceSettingsSection = ({ theme }) => {
 
   return (
     <div className="p-8 rounded-2xl shadow-lg" style={{ backgroundColor: currentColors.secondaryBg }}>
-      <h2 className="text-2xl font-bold mb-6" style={{ color: currentColors.primaryText }}>Device Settings</h2>
+      <ScrollFloat as="h2" containerClassName="text-2xl font-bold mb-6" style={{ color: currentColors.primaryText }}>Device Settings</ScrollFloat>
       <div className="p-6 rounded-lg" style={{ backgroundColor: currentColors.primaryBg }}>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
@@ -134,7 +135,7 @@ const SettingsPage = ({ theme = 'dark', onBack, user, onUpdateUser }) => {
     >
       <div className={`max-w-7xl mx-auto ${mainContentPadding}`}>
         <div className="flex items-center justify-between mb-10">
-          <h1 className="text-5xl font-bold">Settings</h1>
+          <ScrollFloat as="h1" containerClassName="text-5xl font-bold">Settings</ScrollFloat>
           <motion.button
             onClick={onBack}
             className="flex items-center gap-2 text-lg font-semibold transition-colors"

@@ -215,6 +215,21 @@ const App = () => {
             </div>
           </section>
 
+          <motion.section id="how-it-works" className="py-24 md:py-32 px-6" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
+            <div className="max-w-6xl mx-auto">
+              <h2 className="text-4xl md:text-5xl font-extrabold mb-12 text-center" style={{ color: currentColors.primaryText }}>How It Works</h2>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {[{title: 'Capture', desc: 'Record memories by speaking naturally to ECHO.'}, {title: 'Organize', desc: 'Your memories are categorized and searchable.'}, {title: 'Revisit', desc: 'Listen back and relive stories anytime.'}].map((step, idx) => (
+                  <div key={step.title} className="p-8 rounded-2xl text-center shadow-lg" style={{ backgroundColor: currentColors.secondaryBg }}>
+                    <div className="w-12 h-12 mx-auto mb-4 rounded-full flex items-center justify-center text-lg font-bold" style={{ backgroundColor: currentColors.accentGold, color: currentColors.secondaryText }}>{idx + 1}</div>
+                    <h3 className="text-2xl font-bold mb-2" style={{ color: currentColors.primaryText }}>{step.title}</h3>
+                    <p className="opacity-80 text-sm" style={{ color: currentColors.primaryText }}>{step.desc}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </motion.section>
+
           <motion.section id="features" className="py-24 md:py-32 px-6" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
             <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {[1,2,3,4,5,6].map((i) => (
@@ -224,6 +239,36 @@ const App = () => {
                   <p className="opacity-80 text-sm">Short description of a core capability. Fully responsive with Tailwind utility classes.</p>
                 </div>
               ))}
+            </div>
+          </motion.section>
+
+          <motion.section id="stories" className="py-24 md:py-32 px-6" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
+            <div className="max-w-6xl mx-auto">
+              <h2 className="text-4xl md:text-5xl font-extrabold mb-12 text-center" style={{ color: currentColors.primaryText }}>Stories</h2>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {["ECHO helped me remember my grandfather's stories.", "We revisit our travel memories together.", "Recording daily moments has been life-changing."].map((quote, i) => (
+                  <div key={i} className="p-6 rounded-2xl shadow-lg" style={{ backgroundColor: currentColors.secondaryBg }}>
+                    <p className="text-sm leading-relaxed" style={{ color: currentColors.primaryText }}>
+                      “{quote}”
+                    </p>
+                    <div className="mt-4 h-1 w-12 rounded" style={{ backgroundColor: currentColors.accentGold }} />
+                  </div>
+                ))}
+              </div>
+            </div>
+          </motion.section>
+
+          <motion.section id="resources" className="py-24 md:py-32 px-6" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
+            <div className="max-w-6xl mx-auto">
+              <h2 className="text-4xl md:text-5xl font-extrabold mb-12 text-center" style={{ color: currentColors.primaryText }}>Resources</h2>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {[{title: 'Getting Started', desc: 'Learn the basics of ECHO.'}, {title: 'Tips & Tricks', desc: 'Make the most of your memory journal.'}, {title: 'Support', desc: 'Need help? Start here.'}].map((res) => (
+                  <a key={res.title} href="#" className="p-6 rounded-2xl shadow-lg block hover:opacity-90 transition" style={{ backgroundColor: currentColors.secondaryBg }}>
+                    <h3 className="text-xl font-bold mb-2" style={{ color: currentColors.primaryText }}>{res.title}</h3>
+                    <p className="opacity-80 text-sm" style={{ color: currentColors.primaryText }}>{res.desc}</p>
+                  </a>
+                ))}
+              </div>
             </div>
           </motion.section>
         </main>

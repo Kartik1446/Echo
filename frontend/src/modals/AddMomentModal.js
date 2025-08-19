@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Users, Image as ImageIcon, Video, CheckCircle } from 'lucide-react';
 import { themes } from '../styles/tailwindStyles';
+import ScrollFloat from '../shared/ScrollFloat';
 
 const AddMomentModal = ({ theme = 'dark', onClose, onSaveMoment }) => {
   const currentColors = themes[theme];
@@ -44,7 +45,7 @@ const AddMomentModal = ({ theme = 'dark', onClose, onSaveMoment }) => {
         {isSaved ? (
           <motion.div key="saved" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex flex-col items-center justify-center w-full">
             <CheckCircle className="w-24 h-24 text-green-400 mb-6" />
-            <h2 className="text-4xl font-bold mb-3" style={{ color: currentColors.primaryText }}>Moment Saved!</h2>
+            <ScrollFloat as="h2" containerClassName="text-4xl font-bold mb-3" style={{ color: currentColors.primaryText }}>Moment Saved!</ScrollFloat>
             <p className="text-center mb-8 max-w-sm" style={{ color: currentColors.primaryText, opacity: 0.8 }}>Your new memory has been anchored with ECHO.</p>
             <div className="flex items-center gap-4 mt-6 w-full">
               <button onClick={handleNewMoment} className="w-1/2 p-3 text-sm transition-opacity rounded-lg" style={{ color: currentColors.primaryText, opacity: 0.7, border: `1px solid ${currentColors.warmBronze}` }}>Add Another</button>
@@ -54,7 +55,7 @@ const AddMomentModal = ({ theme = 'dark', onClose, onSaveMoment }) => {
         ) : step === 'initial' ? (
           <motion.div key="initial" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex flex-col items-center justify-center w-full">
             <Users size={80} className="mb-6" style={{ color: currentColors.accentGold }} />
-            <h2 className="text-4xl font-bold mb-3" style={{ color: currentColors.primaryText }}>Add a New Moment</h2>
+            <ScrollFloat as="h2" containerClassName="text-4xl font-bold mb-3" style={{ color: currentColors.primaryText }}>Add a New Moment</ScrollFloat>
             <p className="text-center mb-10 max-w-sm" style={{ color: currentColors.primaryText, opacity: 0.8 }}>Upload a photo or video to create a new memory anchor for ECHO.</p>
             <div className="flex w-full gap-6 my-4">
               <button onClick={() => handleUploadClick('Photo')} className="flex-1 flex flex-col items-center justify-center p-8 rounded-lg border transition-colors text-lg font-semibold" style={{ backgroundColor: currentColors.primaryBg, borderColor: 'transparent', color: currentColors.primaryText }}><ImageIcon size={32} className="mb-3" style={{ color: currentColors.accentGold }} /> Upload Photo</button>
@@ -64,7 +65,7 @@ const AddMomentModal = ({ theme = 'dark', onClose, onSaveMoment }) => {
           </motion.div>
         ) : (
           <motion.div key="addDetails" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex flex-col items-center w-full text-left">
-            <h2 className="text-3xl font-bold mb-6 self-start" style={{ color: currentColors.primaryText }}>Tell us about this {momentType}</h2>
+            <ScrollFloat as="h2" containerClassName="text-3xl font-bold mb-6 self-start" style={{ color: currentColors.primaryText }}>Tell us about this {momentType}</ScrollFloat>
             <div className="rounded-lg w-full h-72 flex items-center justify-center mb-6" style={{ backgroundColor: 'rgba(0,0,0,0.2)' }}>
               {momentType === 'Photo' && filePreview && <img src={filePreview} alt="Moment preview" className="max-w-full max-h-full object-contain rounded-md" />}
               {momentType === 'Video' && filePreview && <video src={filePreview} controls className="max-w-full max-h-full rounded-md" />}

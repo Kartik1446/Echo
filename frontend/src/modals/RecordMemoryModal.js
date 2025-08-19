@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Mic, CheckCircle } from 'lucide-react';
 import { themes } from '../styles/tailwindStyles';
+import ScrollFloat from '../shared/ScrollFloat';
 
 const RecordMemoryModal = ({ theme = 'dark', onClose, onSaveSpeech }) => {
   const currentColors = themes[theme];
@@ -34,7 +35,7 @@ const RecordMemoryModal = ({ theme = 'dark', onClose, onSaveSpeech }) => {
       <AnimatePresence mode="wait">
         {recordState === 'idle' && (
           <motion.div key="idle" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex flex-col items-center w-full">
-            <h2 className="text-4xl font-bold mb-3" style={{ color: currentColors.primaryText }}>Record a memory</h2>
+            <ScrollFloat as="h2" containerClassName="text-4xl font-bold mb-3" style={{ color: currentColors.primaryText }}>Record a memory</ScrollFloat>
             <p className="text-center mb-8 max-w-sm" style={{ color: currentColors.primaryText, opacity: 0.8 }}>Speak clearly about a person, place, or event you want ECHO to remember.</p>
             <div className="flex flex-col items-center justify-center my-6">
               <motion.button onClick={startRecording} className="w-36 h-36 rounded-full flex items-center justify-center shadow-lg" style={{ backgroundColor: currentColors.accentGold }} whileTap={{ scale: 0.9 }}>
@@ -47,7 +48,7 @@ const RecordMemoryModal = ({ theme = 'dark', onClose, onSaveSpeech }) => {
         )}
         {recordState === 'recording' && (
           <motion.div key="recording" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex flex-col items-center w-full">
-            <h2 className="text-4xl font-bold mb-8" style={{ color: currentColors.primaryText }}>Recording...</h2>
+            <ScrollFloat as="h2" containerClassName="text-4xl font-bold mb-8" style={{ color: currentColors.primaryText }}>Recording...</ScrollFloat>
             <div className="flex flex-col items-center justify-center my-6">
               <div className="w-36 h-36 rounded-full flex items-center justify-center shadow-lg mic-glow-active" style={{ backgroundColor: currentColors.accentGold }}><Mic className="w-20 h-20" style={{ color: currentColors.secondaryText }} /></div>
               <p className="mt-6 text-4xl font-mono" style={{ color: currentColors.primaryText }}>{formatTime(timer)}</p>
@@ -65,7 +66,7 @@ const RecordMemoryModal = ({ theme = 'dark', onClose, onSaveSpeech }) => {
         {recordState === 'saved' && (
           <motion.div key="saved" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex flex-col items-center w-full">
             <CheckCircle className="w-24 h-24 text-green-400 mb-6" />
-            <h2 className="text-4xl font-bold mb-3" style={{ color: currentColors.primaryText }}>Memory Saved</h2>
+            <ScrollFloat as="h2" containerClassName="text-4xl font-bold mb-3" style={{ color: currentColors.primaryText }}>Memory Saved</ScrollFloat>
             <p className="text-center mb-8 max-w-sm" style={{ color: currentColors.primaryText, opacity: 0.8 }}>Your memory has been successfully anchored with ECHO.</p>
             <div className="flex items-center gap-4 mt-6 w-full">
               <button onClick={resetRecording} className="w-1/2 p-3 text-sm transition-opacity rounded-lg" style={{ color: currentColors.primaryText, opacity: 0.7, border: `1px solid ${currentColors.warmBronze}` }}>New Recording</button>
