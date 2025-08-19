@@ -25,7 +25,7 @@ ECHO is a modular, privacy-first memory assistant built on the Internet Computer
 # Face Detection Stats
 <img width="2125" height="739" alt="Screenshot 2025-08-19 165142" src="https://github.com/user-attachments/assets/be077a9f-9d9c-467c-877f-4d856ab037e8" />
 
-# viddeo Stream Stats
+# video Stream Stats
 <img width="2125" height="1223" alt="image" src="https://github.com/user-attachments/assets/a0ec588e-6180-41df-9f12-dc76a9de931e" />
 
 ## ✅ Features
