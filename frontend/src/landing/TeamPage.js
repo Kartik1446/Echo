@@ -6,7 +6,6 @@ import satyabratImg from './satyabrat.jpeg';
 import kartikImg from './kartik.jpeg';
 import ashutoshImg from './ashutosh.jpeg';
 import archanaImg from './archana.jpeg';
-import ScrollFloat from '../shared/ScrollFloat';
 
 const teamMembers = [
   {
@@ -56,7 +55,7 @@ const TeamMemberCard = ({ theme, member }) => {
           onError={(e) => { e.target.onerror = null; e.target.src = "https://placehold.co/300x300/2C2623/F9E4C8?text=Photo"; }}
         />
       </div>
-      <ScrollFloat as="h3" containerClassName="text-2xl font-bold" style={{ color: currentColors.primaryText }}>{member.name}</ScrollFloat>
+      <h3 className="text-2xl font-bold" style={{ color: currentColors.primaryText }}>{member.name}</h3>
       <p className="text-lg font-medium mb-6" style={{ color: currentColors.accentGold }}>{member.role}</p>
       <div className="flex justify-center items-center space-x-5">
         <a href={member.githubUrl} target="_blank" rel="noopener noreferrer" className="opacity-70 hover:opacity-100 transition-colors" style={{ color: currentColors.primaryText }}>
@@ -94,7 +93,7 @@ const TeamPage = ({ theme = 'dark', onBack }) => {
         </motion.button>
 
         <div className="text-center">
-          <ScrollFloat as="h1" containerClassName="text-5xl md:text-6xl font-extrabold mb-16" style={{ color: currentColors.primaryText }}>Meet the Team Behind ECHO</ScrollFloat>
+          <h1 className="text-5xl md:text-6xl font-extrabold mb-16" style={{ color: currentColors.primaryText }}>Meet the Team Behind ECHO</h1>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
             {teamMembers.map((member, index) => (
               <motion.div
