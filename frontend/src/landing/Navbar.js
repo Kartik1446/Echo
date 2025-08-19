@@ -1,8 +1,9 @@
 import React from 'react';
 import { themes } from '../styles/tailwindStyles';
 
-const Navbar = ({ theme = 'dark', toggleTheme, onGetStartedClick, onTeamClick }) => {
+const Navbar = ({ theme = 'dark', toggleTheme, onGetStartedClick, onTeamClick, isLoggedIn = false, currentPage = 'landing' }) => {
   const currentColors = themes[theme];
+  
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50`} style={{ backgroundColor: currentColors.primaryBg, opacity: 0.9, backdropFilter: 'blur(4px)' }}>
       <div className="container mx-auto flex justify-between items-center h-20 px-6">
@@ -15,13 +16,39 @@ const Navbar = ({ theme = 'dark', toggleTheme, onGetStartedClick, onTeamClick })
           />
           <span style={{ color: currentColors.accentGold }} className="text-3xl font-bold">ECHO</span>
         </div>
+        
         <div className="hidden md:flex space-x-10 items-center">
-          <a href="#home" style={{ color: currentColors.primaryText }} className="hover:opacity-80 transition-colors duration-300">Home</a>
-          <a href="#how-it-works" style={{ color: currentColors.primaryText }} className="hover:opacity-80 transition-colors duration-300">How It Works</a>
-          <a href="#features" style={{ color: currentColors.primaryText }} className="hover:opacity-80 transition-colors duration-300">Features</a>
-          <a href="#stories" style={{ color: currentColors.primaryText }} className="hover:opacity-80 transition-colors duration-300">Stories</a>
-          <a href="#resources" style={{ color: currentColors.primaryText }} className="hover:opacity-80 transition-colors duration-300">Resources</a>
-          <a href="#team" onClick={(e) => { e.preventDefault(); onTeamClick && onTeamClick(); }} style={{ color: currentColors.primaryText }} className="hover:opacity-80 transition-colors duration-300">Team</a>
+          {currentPage === 'dashboard' ? (
+            // Dashboard navigation
+            <>
+              <span style={{ color: currentColors.primaryText }} className="text-lg font-medium">Dashboard</span>
+              <button
+                onClick={onGetStartedClick}
+                className="px-6 py-2 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105"
+                style={{ backgroundColor: currentColors.accentGold, color: currentColors.secondaryText }}
+              >
+                Home
+              </button>
+            </>
+          ) : (
+            // Landing page navigation
+            <>
+              <a href="#home" style={{ color: currentColors.primaryText }} className="hover:opacity-80 transition-colors duration-300">Home</a>
+              <a href="#how-it-works" style={{ color: currentColors.primaryText }} className="hover:opacity-80 transition-colors duration-300">How It Works</a>
+              <a href="#features" style={{ color: currentColors.primaryText }} className="hover:opacity-80 transition-colors duration-300">Features</a>
+              <a href="#stories" style={{ color: currentColors.primaryText }} className="hover:opacity-80 transition-colors duration-300">Stories</a>
+              <a href="#resources" style={{ color: currentColors.primaryText }} className="hover:opacity-80 transition-colors duration-300">Resources</a>
+              <a href="#team" onClick={(e) => { e.preventDefault(); onTeamClick && onTeamClick(); }} style={{ color: currentColors.primaryText }} className="hover:opacity-80 transition-colors duration-300">Team</a>
+              <button
+                onClick={onGetStartedClick}
+                className="px-6 py-2 rounded-lg font-semibold transition-all duration-300 transform hover:scale-105"
+                style={{ backgroundColor: currentColors.accentGold, color: currentColors.secondaryText }}
+              >
+                {isLoggedIn ? 'Dashboard' : 'Get Started'}
+              </button>
+            </>
+          )}
+          
           <button
             onClick={toggleTheme}
             className="p-2 rounded-full transition-colors duration-300 focus:outline-none"
@@ -35,6 +62,7 @@ const Navbar = ({ theme = 'dark', toggleTheme, onGetStartedClick, onTeamClick })
             )}
           </button>
         </div>
+        
         <div className="md:hidden">
           <button className="focus:outline-none" style={{ color: currentColors.primaryText }}>
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
