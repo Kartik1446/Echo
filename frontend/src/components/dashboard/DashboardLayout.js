@@ -4,7 +4,6 @@ import { Home, Book, Bell, User, Settings, LogOut, Volume2, VolumeX, ChevronLeft
 import NavItem from './NavItem';
 import FeatureCards from './FeatureCards';
 import { themes } from '../../styles/tailwindStyles';
-import ScrollFloat from '../../shared/ScrollFloat';
 
 const DashboardLayout = ({ theme = 'dark', onLogout, userName, isMicActive, onAddSpeechClick, onAddMomentClick, onListenClick, onRemindersClick, onJournalClick, onSettingsClick, onCaregiverClick }) => {
   const [open, setOpen] = useState(true);
@@ -43,7 +42,7 @@ const DashboardLayout = ({ theme = 'dark', onLogout, userName, isMicActive, onAd
           <div className="flex-shrink-0">
             <div className="flex items-center justify-between p-8 rounded-2xl mb-8" style={{ backgroundColor: currentColors.warmBronze }}>
               <div>
-                <ScrollFloat as="h1" containerClassName="text-5xl font-bold mb-2" style={{ color: currentColors.primaryText }}>Hi {userName || 'there'}!</ScrollFloat>
+                <h1 className="text-5xl font-bold mb-2" style={{ color: currentColors.primaryText }}>Hi {userName || 'there'}!</h1>
                 <p className="text-lg" style={{ color: currentColors.primaryText, opacity: 0.8 }}>Today is a good day to remember</p>
               </div>
               <div className="hidden md:block"><HeartHandshake style={{ color: currentColors.accentGold, opacity: 0.5 }} size={80} strokeWidth={1.5} /></div>
@@ -51,7 +50,7 @@ const DashboardLayout = ({ theme = 'dark', onLogout, userName, isMicActive, onAd
             <FeatureCards theme={theme} isMicActive={isMicActive} onAddSpeechClick={onAddSpeechClick} onAddMomentClick={onAddMomentClick} onListenClick={onListenClick} />
           </div>
           <div className="flex-grow p-8 rounded-2xl shadow-xl mt-8 flex flex-col" style={{ backgroundColor: currentColors.secondaryBg }}>
-            <ScrollFloat as="h2" containerClassName="text-2xl font-semibold text-white mb-6 flex-shrink-0">Memory Journal Feed</ScrollFloat>
+            <h2 className="text-2xl font-semibold text-white mb-6 flex-shrink-0">Memory Journal Feed</h2>
             <div className="flex-grow overflow-y-auto">
               <p className="text-gray-400">Content for the memory journal will be displayed here.</p>
             </div>
