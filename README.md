@@ -83,7 +83,9 @@ ECHO is a modular, privacy-first memory assistant built on the Internet Computer
 ### 1. Clone & Install
 ```sh
 git clone <repo-url>
-cd echo_memory_assistant
+cd Echo_Backend_ml (for bacckend)
+cd Echo (for whole website)
+cd Echo_Frontend_ml(For Frontend)
 ```
 
 ### 2. Start ICP Local Replica
