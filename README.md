@@ -22,6 +22,12 @@ ECHO is a modular, privacy-first memory assistant built on the Internet Computer
 # Emotion Detection Stats
 ![WhatsApp Image 2025-07-25 at 15 00 24_9b7656b0](https://github.com/user-attachments/assets/65d1dc84-2732-49a8-8bef-6c882c42f10b)
 
+# Face Detection Stats
+<img width="2125" height="739" alt="Screenshot 2025-08-19 165142" src="https://github.com/user-attachments/assets/be077a9f-9d9c-467c-877f-4d856ab037e8" />
+
+# viddeo Stream Stats
+<img width="2125" height="1223" alt="image" src="https://github.com/user-attachments/assets/a0ec588e-6180-41df-9f12-dc76a9de931e" />
+
 ## ✅ Features
 
 | Feature                          | Description |
