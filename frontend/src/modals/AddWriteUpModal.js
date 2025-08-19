@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CheckCircle } from 'lucide-react';
 import { themes } from '../styles/tailwindStyles';
-import ScrollFloat from '../shared/ScrollFloat';
 
 const AddWriteUpModal = ({ theme = 'dark', onClose, onSaveWriteUp }) => {
   const currentColors = themes[theme];
@@ -35,7 +34,7 @@ const AddWriteUpModal = ({ theme = 'dark', onClose, onSaveWriteUp }) => {
         {isSaved ? (
           <motion.div key="saved" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex flex-col items-center justify-center w-full text-center">
             <CheckCircle className="w-24 h-24 text-green-400 mb-6" />
-            <ScrollFloat as="h2" containerClassName="text-4xl font-bold mb-3" style={{ color: currentColors.primaryText }}>Write Up Saved!</ScrollFloat>
+            <h2 className="text-4xl font-bold mb-3" style={{ color: currentColors.primaryText }}>Write Up Saved!</h2>
             <p className="text-center mb-8 max-w-sm" style={{ color: currentColors.primaryText, opacity: 0.8 }}>Your new memory has been anchored with ECHO.</p>
             <div className="flex items-center gap-4 mt-6 w-full">
               <button onClick={handleAddNew} className="w-1/2 p-3 text-sm transition-opacity rounded-lg" style={{ color: currentColors.primaryText, opacity: 0.7, border: `1px solid ${currentColors.warmBronze}` }}>Add Another</button>
@@ -47,7 +46,7 @@ const AddWriteUpModal = ({ theme = 'dark', onClose, onSaveWriteUp }) => {
             <button onClick={onClose} className="absolute top-6 right-6 z-10 transition-colors" style={{ color: currentColors.primaryText }} aria-label="Close">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
             </button>
-            <ScrollFloat as="h2" containerClassName="text-4xl font-bold mb-8" style={{ color: currentColors.primaryText }}>Add a Write Up</ScrollFloat>
+            <h2 className="text-4xl font-bold mb-8" style={{ color: currentColors.primaryText }}>Add a Write Up</h2>
             <div className="space-y-6 flex-shrink-0">
               <div>
                 <label className="block text-sm font-medium mb-2" style={{ color: currentColors.primaryText, opacity: 0.9 }}>Title</label>
