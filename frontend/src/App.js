@@ -4,7 +4,7 @@ import Navbar from './landing/Navbar';
 import TeamPage from './landing/TeamPage';
 import { themes } from './styles/tailwindStyles';
 import './App.css';
-import MagnetLines from './shared/MagnetLines';
+
 import LoginPage from './modals/LoginPage';
 import ProfileSetupPage from './modals/ProfileSetupPage';
 import LogoutConfirmModal from './modals/LogoutConfirmModal';
@@ -152,9 +152,6 @@ const App = () => {
   if (currentPage === 'team') {
     return (
       <div style={{ minHeight: '100vh', position: 'relative' }}>
-        <div style={{ position: 'fixed', inset: 0, display: 'grid', placeItems: 'center', pointerEvents: 'none', zIndex: 0 }}>
-          <MagnetLines rows={12} columns={20} lineColor="#efefef22" style={{ width: '100vw', height: '100vh' }} />
-        </div>
         <div style={{ position: 'relative', zIndex: 1, color: currentColors.primaryText }}>
           <Navbar theme={theme} toggleTheme={toggleTheme} onGetStartedClick={handleGetStarted} onTeamClick={() => setCurrentPage('team')} isLoggedIn={isLoggedIn} currentPage={currentPage} />
           <TeamPage theme={theme} onBack={() => setCurrentPage('landing')} />
@@ -166,9 +163,6 @@ const App = () => {
   if (currentPage === 'dashboard') {
     return (
       <div style={{ minHeight: '100vh', position: 'relative' }}>
-        <div style={{ position: 'fixed', inset: 0, display: 'grid', placeItems: 'center', pointerEvents: 'none', zIndex: 0 }}>
-          <MagnetLines rows={12} columns={20} lineColor="#efefef22" style={{ width: '100vw', height: '100vh' }} />
-        </div>
         <div style={{ position: 'relative', zIndex: 1, color: currentColors.primaryText }}>
           <Navbar theme={theme} toggleTheme={toggleTheme} onGetStartedClick={handleGetStarted} onTeamClick={() => setCurrentPage('team')} isLoggedIn={isLoggedIn} currentPage={currentPage} />
           <DashboardModal
@@ -184,9 +178,6 @@ const App = () => {
 
   return (
     <div style={{ minHeight: '100vh', position: 'relative' }}>
-      <div style={{ position: 'fixed', inset: 0, display: 'grid', placeItems: 'center', pointerEvents: 'none', zIndex: 0 }}>
-        <MagnetLines rows={12} columns={20} lineColor="#efefef22" style={{ width: '100vw', height: '100vh' }} />
-      </div>
       <div style={{ position: 'relative', zIndex: 1, color: currentColors.primaryText }}>
         <Navbar theme={theme} toggleTheme={toggleTheme} onGetStartedClick={handleGetStarted} onTeamClick={() => setCurrentPage('team')} isLoggedIn={isLoggedIn} currentPage={currentPage} />
         <main className="pt-20">
