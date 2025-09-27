@@ -16,6 +16,7 @@ from io import BytesIO
 from PIL import Image
 from datetime import datetime, date
 import re
+import pandas as pd
 
 # Optional: time-based scheduler
 try:

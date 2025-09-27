@@ -8,13 +8,44 @@ const LoginPage = ({ theme = 'dark', onClose, onLoginSuccess = () => {} }) => {
   const [isLoginMode, setIsLoginMode] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+    confirmPassword: ''
+  });
 
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
   const toggleConfirmPasswordVisibility = () => setShowConfirmPassword(!showConfirmPassword);
 
+  const handleInputChange = (e) => {
+    setFormData(prev => ({
+      ...prev,
+      [e.target.name]: e.target.value
+    }));
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    onLoginSuccess();
+    
+    // Basic validation
+    if (!formData.email || !formData.password) {
+      alert('Please fill in all required fields');
+      return;
+    }
+    
+    if (!isLoginMode && formData.password !== formData.confirmPassword) {
+      alert('Passwords do not match');
+      return;
+    }
+
+    // Create user data object
+    const userData = {
+      email: formData.email,
+      loginTime: new Date().toISOString(),
+      isNewUser: !isLoginMode
+    };
+
+    onLoginSuccess(userData);
   };
 
   return (
@@ -68,6 +99,9 @@ const LoginPage = ({ theme = 'dark', onClose, onLoginSuccess = () => {} }) => {
           <input
             type="email"
             id="email"
+            name="email"
+            value={formData.email}
+            onChange={handleInputChange}
             placeholder="your@example.com"
             className="w-full p-3 rounded-lg focus:outline-none focus:ring-2"
             style={{
@@ -83,6 +117,9 @@ const LoginPage = ({ theme = 'dark', onClose, onLoginSuccess = () => {} }) => {
             <input
               type={showPassword ? 'text' : 'password'}
               id="password"
+              name="password"
+              value={formData.password}
+              onChange={handleInputChange}
               placeholder="••••••••"
               className="w-full p-3 rounded-lg focus:outline-none focus:ring-2"
               style={{
@@ -108,6 +145,9 @@ const LoginPage = ({ theme = 'dark', onClose, onLoginSuccess = () => {} }) => {
               <input
                 type={showConfirmPassword ? 'text' : 'password'}
                 id="confirm-password"
+                name="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={handleInputChange}
                 placeholder="••••••••"
                 className="w-full p-3 rounded-lg focus:outline-none focus:ring-2"
                 style={{
