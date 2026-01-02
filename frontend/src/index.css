@@ -27,7 +27,7 @@ body.dark {
 
 /* Theme backgrounds so the universal MagnetLines background is visible */
 body.dark {
-  background-color: #1E1A18;
+  background-color: #000000;
   color: #F9E4C8;
 }
 body.light {
