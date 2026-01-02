@@ -5,6 +5,7 @@ import TeamPage from './landing/TeamPage';
 import { themes } from './styles/tailwindStyles';
 import './App.css';
 import PixelBlast from './PixelBlast';
+import DarkVeil from './DarkVeil';
 
 import LoginPage from './modals/LoginPage';
 import ProfileSetupPage from './modals/ProfileSetupPage';
@@ -180,7 +181,7 @@ const App = () => {
   return (
     <div style={{ minHeight: '100vh', position: 'relative' }}>
 
-      <div style={{ width: '100%', height: '100vh', position: 'absolute', top: 0, left: 0, zIndex: -1 }}>
+      <div style={{ width: '100%', height: '100%', position: 'absolute', top: 0, left: 0, zIndex: -1 }}>
         <PixelBlast
           variant="circle"
           pixelSize={6}
@@ -205,14 +206,16 @@ const App = () => {
         <Navbar theme={theme} toggleTheme={toggleTheme} onGetStartedClick={handleGetStarted} onTeamClick={() => setCurrentPage('team')} isLoggedIn={isLoggedIn} currentPage={currentPage} />
         <main className="pt-20">
           <section id="home" className="relative flex flex-col md:flex-row items-center justify-center py-24 md:py-32 px-6 text-center md:text-left">
-            <div className="md:w-1/2 p-4">
+            <div style={{ width: '100%', height: '600px', position: 'absolute', top: 0, left: 0, overflow: 'hidden' }}>
+              <DarkVeil />
+            </div>
+            <div className="md:w-1/2 p-4 relative z-10">
               <h1 className="text-5xl md:text-7xl font-extrabold mb-6 leading-tight" style={{ color: currentColors.primaryText }}>
                 Reimagining <br /> Memories with AI
               </h1>
               <p className="text-lg md:text-xl max-w-2xl mx-auto mb-10" style={{ color: currentColors.primaryText }}>
                 ECHO helps you capture, organize, and revisit life's precious moments through speech. Stay connected to your memories, effortlessly.
               </p>
-              
             </div>
           </section>
 
@@ -233,13 +236,36 @@ const App = () => {
 
           <motion.section id="features" className="py-24 md:py-32 px-6" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
             <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {[1,2,3,4,5,6].map((i) => (
-                <div key={i} className="p-6 rounded-2xl shadow-lg" style={{ backgroundColor: currentColors.secondaryBg }}>
-                  <div className="h-10 w-10 rounded-lg mb-4" style={{ backgroundColor: currentColors.accentGold }} />
-                  <h3 className="text-xl font-bold mb-2">Feature {i}</h3>
-                  <p className="opacity-80 text-sm">Short description of a core capability. Fully responsive with Tailwind utility classes.</p>
-                </div>
-              ))}
+              <div className="p-6 rounded-2xl shadow-lg" style={{ backgroundColor: currentColors.secondaryBg }}>
+                <div className="h-10 w-10 rounded-lg mb-4" style={{ backgroundColor: currentColors.accentGold }} />
+                <h3 className="text-xl font-bold mb-2">Secure On-Chain Memory & Logic</h3>
+                <p className="opacity-80 text-sm">Short description of a core capability. Fully responsive with Tailwind utility classes.</p>
+              </div>
+              <div className="p-6 rounded-2xl shadow-lg" style={{ backgroundColor: currentColors.secondaryBg }}>
+                <div className="h-10 w-10 rounded-lg mb-4" style={{ backgroundColor: currentColors.accentGold }} />
+                <h3 className="text-xl font-bold mb-2">Smart Memory Recall & Caregiver Anchoring</h3>
+                <p className="opacity-80 text-sm">Short description of a core capability. Fully responsive with Tailwind utility classes.</p>
+              </div>
+              <div className="p-6 rounded-2xl shadow-lg" style={{ backgroundColor: currentColors.secondaryBg }}>
+                <div className="h-10 w-10 rounded-lg mb-4" style={{ backgroundColor: currentColors.accentGold }} />
+                <h3 className="text-xl font-bold mb-2">Emotion & Behavior Detection</h3>
+                <p className="opacity-80 text-sm">Short description of a core capability. Fully responsive with Tailwind utility classes.</p>
+              </div>
+              <div className="p-6 rounded-2xl shadow-lg" style={{ backgroundColor: currentColors.secondaryBg }}>
+                <div className="h-10 w-10 rounded-lg mb-4" style={{ backgroundColor: currentColors.accentGold }} />
+                <h3 className="text-xl font-bold mb-2">Adaptive AI Reasoning & Empathetic Responses</h3>
+                <p className="opacity-80 text-sm">Short description of a core capability. Fully responsive with Tailwind utility classes.</p>
+              </div>
+              <div className="p-6 rounded-2xl shadow-lg" style={{ backgroundColor: currentColors.secondaryBg }}>
+                <div className="h-10 w-10 rounded-lg mb-4" style={{ backgroundColor: currentColors.accentGold }} />
+                <h3 className="text-xl font-bold mb-2">Real-Time Caregiver Alerts & Monitoring</h3>
+                <p className="opacity-80 text-sm">Short description of a core capability. Fully responsive with Tailwind utility classes.</p>
+              </div>
+              <div className="p-6 rounded-2xl shadow-lg" style={{ backgroundColor: currentColors.secondaryBg }}>
+                <div className="h-10 w-10 rounded-lg mb-4" style={{ backgroundColor: currentColors.accentGold }} />
+                <h3 className="text-xl font-bold mb-2">Modular, Extensible Architecture</h3>
+                <p className="opacity-80 text-sm">Short description of a core capability. Fully responsive with Tailwind utility classes.</p>
+              </div>
             </div>
           </motion.section>
 
@@ -261,7 +287,7 @@ const App = () => {
 
           <motion.section id="resources" className="py-24 md:py-32 px-6" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
             <div className="max-w-6xl mx-auto">
-              <h2 className="text-4xl md:text-5xl font-extrabold mb-12 text-center" style={{ color: currentColors.primaryText }}>Resources</h2>
+              <h2 className="text-4xl md:text-5xl font-extrabold mb-12 text-center" style={{ color: currentColors.primaryText, textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)' }}>Resources</h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 {[{title: 'Getting Started', desc: 'Learn the basics of ECHO.'}, {title: 'Tips & Tricks', desc: 'Make the most of your memory journal.'}, {title: 'Support', desc: 'Need help? Start here.'}].map((res) => (
                   <a key={res.title} href="#" className="p-6 rounded-2xl shadow-lg block hover:opacity-90 transition" style={{ backgroundColor: currentColors.secondaryBg }}>

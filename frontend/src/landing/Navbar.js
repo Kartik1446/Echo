@@ -14,7 +14,6 @@ const Navbar = ({ theme = 'dark', toggleTheme, onGetStartedClick, onTeamClick, i
             className="w-12 h-12 mr-3 object-contain rounded-full"
             onError={(e) => { e.target.onerror = null; e.target.src = `${process.env.PUBLIC_URL}/logo192.png`; }}
           />
-          <span style={{ color: currentColors.accentGold }} className="text-3xl font-bold">ECHO</span>
         </div>
         
         <div className="hidden md:flex space-x-10 items-center">
