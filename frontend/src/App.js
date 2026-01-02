@@ -4,6 +4,7 @@ import Navbar from './landing/Navbar';
 import TeamPage from './landing/TeamPage';
 import { themes } from './styles/tailwindStyles';
 import './App.css';
+import PixelBlast from './PixelBlast';
 
 import LoginPage from './modals/LoginPage';
 import ProfileSetupPage from './modals/ProfileSetupPage';
@@ -163,7 +164,7 @@ const App = () => {
   if (currentPage === 'dashboard') {
     return (
       <div style={{ minHeight: '100vh', position: 'relative' }}>
-        <div style={{ position: 'relative', zIndex: 1, color: currentColors.primaryText }}>
+        <div style={{ position: 'relative', zIndex: -1, color: currentColors.primaryText }}>
           <Navbar theme={theme} toggleTheme={toggleTheme} onGetStartedClick={handleGetStarted} onTeamClick={() => setCurrentPage('team')} isLoggedIn={isLoggedIn} currentPage={currentPage} />
           <DashboardModal
             theme={theme}
@@ -178,6 +179,28 @@ const App = () => {
 
   return (
     <div style={{ minHeight: '100vh', position: 'relative' }}>
+
+      <div style={{ width: '100%', height: '100vh', position: 'absolute', top: 0, left: 0, zIndex: -1 }}>
+        <PixelBlast
+          variant="circle"
+          pixelSize={6}
+          color="#B19EEF"
+          patternScale={3}
+          patternDensity={1.2}
+          pixelSizeJitter={0.5}
+          enableRipples
+          rippleSpeed={0.4}
+          rippleThickness={0.12}
+          rippleIntensityScale={1.5}
+          liquid
+          liquidStrength={0.12}
+          liquidRadius={1.2}
+          liquidWobbleSpeed={5}
+          speed={0.6}
+          edgeFade={0.25}
+          transparent
+        />
+      </div>
       <div style={{ position: 'relative', zIndex: 1, color: currentColors.primaryText }}>
         <Navbar theme={theme} toggleTheme={toggleTheme} onGetStartedClick={handleGetStarted} onTeamClick={() => setCurrentPage('team')} isLoggedIn={isLoggedIn} currentPage={currentPage} />
         <main className="pt-20">
@@ -189,20 +212,7 @@ const App = () => {
               <p className="text-lg md:text-xl max-w-2xl mx-auto mb-10" style={{ color: currentColors.primaryText }}>
                 ECHO helps you capture, organize, and revisit life's precious moments through speech. Stay connected to your memories, effortlessly.
               </p>
-              <button 
-                onClick={handleGetStarted}
-                className="px-8 py-3 rounded-lg font-semibold shadow-lg transition transform hover:scale-105" 
-                style={{ backgroundColor: currentColors.accentGold, color: currentColors.secondaryText }}
-              >
-                Get Started
-              </button>
-            </div>
-            <div className="md:w-1/2 p-4 mt-12 md:mt-0 flex justify-center">
-              <div className="w-72 h-72 md:w-96 md:h-96 rounded-full overflow-hidden flex items-center justify-center border-4 shadow-2xl" style={{ backgroundColor: currentColors.secondaryBg, borderColor: currentColors.accentGold }}>
-                <span className="text-center text-xl" style={{ color: currentColors.primaryText }}>
-                  [Circular Animatic/Video Placeholder]
-                </span>
-              </div>
+              
             </div>
           </section>
 

@@ -1,17 +1,17 @@
 // Theme palette used across the app for dark and light modes
 export const themes = {
   dark: {
-    primaryBg: '#1E1A18',
-    secondaryBg: '#2C2623',
-    primaryText: '#F9E4C8',
+    primaryBg: 'black',
+    secondaryBg: 'black',
+    primaryText: '#ffffffff',
     secondaryText: '#1C1208',
-    accentGold: '#FFD700',
+    accentGold: '#514283ff',
     darkGold: '#E5C100',
     glow: '#F8D173',
     glassBg: 'rgba(30, 26, 24, 0.6)',
     glassBorder: 'rgba(255, 215, 0, 0.3)',
     warmBronze: '#8B4513',
-    dashboardBg: '#1E1A18',
+    dashboardBg: '#000000ff',
     sidebarBg: 'rgba(30, 26, 24, 0.8)',
     sidebarHoverBg: 'rgba(44, 38, 35, 0.8)',
     headerBg: 'transparent',
@@ -29,8 +29,8 @@ export const themes = {
     glassBorder: 'rgba(184, 116, 41, 0.3)',
     warmBronze: '#A0522D',
     dashboardBg: '#E0D0B8',
-    sidebarBg: '#F9E4C8',
-    sidebarHoverBg: '#E0D0B8',
+    sidebarBg: '#000000ff',
+    sidebarHoverBg: '#000000ff',
     headerBg: 'transparent',
     headerText: '#B87429',
   }
