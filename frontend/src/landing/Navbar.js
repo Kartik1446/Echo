@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const Navbar = ({ onGetStartedClick, onTeamClick, isLoggedIn = false, currentPage = 'landing' }) => {
+const Navbar = ({ onGetStartedClick, onTeamClick, currentPage = 'landing' }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   
@@ -63,7 +63,7 @@ const Navbar = ({ onGetStartedClick, onTeamClick, isLoggedIn = false, currentPag
                 className="px-3 lg:px-5 py-1.5 md:py-2 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 text-xs text-white whitespace-nowrap"
                 style={{ background: 'linear-gradient(135deg, rgba(102, 126, 234, 0.4), rgba(118, 75, 162, 0.4))', border: '1px solid rgba(102, 126, 234, 0.6)' }}
               >
-                {isLoggedIn ? 'Dashboard' : 'Get Started'}
+                Get Started
               </button>
             </>
           )}
@@ -109,7 +109,7 @@ const Navbar = ({ onGetStartedClick, onTeamClick, isLoggedIn = false, currentPag
                   className="px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg font-semibold transition-all duration-300 text-xs text-white mt-1 sm:mt-2 w-full"
                   style={{ background: 'linear-gradient(135deg, rgba(102, 126, 234, 0.6), rgba(118, 75, 162, 0.6))', border: '1px solid rgba(102, 126, 234, 0.6)' }}
                 >
-                  {isLoggedIn ? 'Dashboard' : 'Get Started'}
+                  Get Started
                 </button>
               </>
             )}

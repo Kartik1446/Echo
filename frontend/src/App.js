@@ -3,9 +3,7 @@ import Navbar from './landing/Navbar';
 import TeamPage from './landing/TeamPage';
 import './App.css';
 
-import LoginPage from './modals/LoginPage';
-import ProfileSetupPage from './modals/ProfileSetupPage';
-import LogoutConfirmModal from './modals/LogoutConfirmModal';
+
 import ListenToEchoModal from './modals/ListenToEchoModal';
 import AddMomentModal from './modals/AddMomentModal';
 import RecordMemoryModal from './modals/RecordMemoryModal';
@@ -18,35 +16,17 @@ import ViewportLazyPixelBlast from './components/ViewportLazyPixelBlast';
 const App = () => {
   const [currentPage, setCurrentPage] = useState('landing');
   const [activeModal, setActiveModal] = useState(null);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userProfile, setUserProfile] = useState(null);
+  const [userProfile, setUserProfile] = useState({ name: 'User', dob: '', gender: '' });
 
   const handleGetStarted = () => {
-    if (isLoggedIn) {
-      setCurrentPage('dashboard');
-    } else {
-      setActiveModal('login');
-    }
+    setCurrentPage('dashboard');
   };
 
   const handleCloseModal = () => {
     setActiveModal(null);
   };
 
-  const handleLoginSuccess = (userData) => {
-    setIsLoggedIn(true);
-    setUserProfile(userData);
-    setActiveModal('profile-setup');
-  };
-
-  const handleProfileComplete = (profileData) => {
-    setUserProfile(prev => ({ ...prev, ...profileData }));
-    setCurrentPage('dashboard');
-  };
-
   const handleLogout = () => {
-    setIsLoggedIn(false);
-    setUserProfile(null);
     setCurrentPage('landing');
     setActiveModal(null);
   };
@@ -57,27 +37,6 @@ const App = () => {
 
   const renderModal = () => {
     switch (activeModal) {
-      case 'login':
-        return (
-          <LoginPage
-            onClose={handleCloseModal}
-            onLoginSuccess={handleLoginSuccess}
-          />
-        );
-      case 'profile-setup':
-        return (
-          <ProfileSetupPage
-            onClose={handleCloseModal}
-            onProfileComplete={handleProfileComplete}
-          />
-        );
-      case 'logout-confirm':
-        return (
-          <LogoutConfirmModal
-            onClose={handleCloseModal}
-            onConfirmLogout={handleLogout}
-          />
-        );
       case 'listen-echo':
         return (
           <ListenToEchoModal
@@ -135,7 +94,7 @@ const App = () => {
     return (
       <div style={{ minHeight: '100vh', position: 'relative' }}>
         <div style={{ position: 'relative', zIndex: 1 }}>
-          <Navbar onGetStartedClick={handleGetStarted} onTeamClick={() => setCurrentPage('team')} isLoggedIn={isLoggedIn} currentPage={currentPage} />
+          <Navbar onGetStartedClick={handleGetStarted} onTeamClick={() => setCurrentPage('team')} currentPage={currentPage} />
           <TeamPage onBack={() => setCurrentPage('landing')} />
         </div>
       </div>
@@ -146,10 +105,10 @@ const App = () => {
     return (
       <div style={{ minHeight: '100vh', position: 'relative' }}>
         <div style={{ position: 'relative', zIndex: -1 }}>
-          <Navbar onGetStartedClick={handleGetStarted} onTeamClick={() => setCurrentPage('team')} isLoggedIn={isLoggedIn} currentPage={currentPage} />
+          <Navbar onGetStartedClick={handleGetStarted} onTeamClick={() => setCurrentPage('team')} currentPage={currentPage} />
           <DashboardModal
             onClose={handleBackToLanding}
-            onLogout={() => setActiveModal('logout-confirm')}
+            onLogout={() => setCurrentPage('landing')}
             userProfile={userProfile}
           />
         </div>
@@ -160,7 +119,7 @@ const App = () => {
   return (
     <div style={{ minHeight: '100vh', position: 'relative', backgroundColor: '#000000' }}>
       <div style={{ position: 'relative', zIndex: 1 }}>
-        <Navbar onGetStartedClick={handleGetStarted} onTeamClick={() => setCurrentPage('team')} isLoggedIn={isLoggedIn} currentPage={currentPage} />
+        <Navbar onGetStartedClick={handleGetStarted} onTeamClick={() => setCurrentPage('team')} currentPage={currentPage} />
         <main className="pt-16 sm:pt-20">
           <section id="home" className="relative flex flex-col items-center justify-center" style={{ backgroundColor: '#000000', minHeight: '100vh', willChange: 'transform' }}>
             <div className="absolute inset-0 flex items-center justify-center">
